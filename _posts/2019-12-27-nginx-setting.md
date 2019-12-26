@@ -79,7 +79,7 @@ server{
 }
 ```
 
-이 설정 파일을 nginx 에 적용해주도록 합니다. `/etc/nginx/nginx.conf` 에서 nginx.conf 파일을 고쳐주도록 합니다.
+이 설정 파일을 nginx 에 적용해주도록 합니다. `/etc/nginx/nginx.conf` 에서 __include__ 디렉티브를 사용하여 이 설정을 포함하면 됩니다.
 
 ```bash
 # ... 생략 (이전 포스팅 참조)
@@ -106,11 +106,13 @@ sudo service nginx restart
 
 <img src="https://lh3.googleusercontent.com/5fUoCvZ8KYVbSiEKqJbS-_-hUTvEtvcIakRw1klgbstYedqzF1K8ToPUiGvB-nXeVICSJkZC0CRPBbaLKxj763mLAi7TwiaQ5O0XoMU9VPgaZggcQUYA0R2dLz0PcV2vCgG52ctOOqBg6G3qnK0tThTQCTum4YHN-04JjuGDESkhZ1VPXK_1YZx12ysrtVy-_vhaNIpbFhmw5Zw1UiV_hWwtJmq7jXAdNoTi1WaI2XGeIkT_zoQ8See1PpuikvzZHipob0Zx6r3kLtuMGi3VlvHieAbwOf77EXq7eejEEGc3hYvN0IMV03eih4R0Vaoux7drN5KxNy7FSZ0bzOEXlRSY0m3lRLFc_FPFfXGTSoLpPQxUAYAI60Uop47fkX_CssBIc8kYjLXFs1WuvH_GCTvKIyChsJvfo4IpupoY8Qu6T-5MDPbs_HCglnxTdo4BymP7MybCaSZFx8wBCn4vfTuo_BA-qMaYdiy9Kmey1M7B_w3a58A5wimTJErT8utI_b0DdlyA9i_Iq67K4xmZ5J8sqebKT-0Z30WDokh8ypwTD9SFEhlb8zR61Cs0vJz9acStXshvUF00MF8e4dTquH_8Xf69ET0oPiWlqM4zpvisEfG69IZYQg-o2IXJV7z3Y5oi_bH4Z5uBw-oYWQkg8a7pn_IEf9vOxRo-NVSwErSFcAj6llOW0Jw=w1680-h496-no" alt="nginx-setting-01">
 
-그런데 한번 `{domain}/about` 으로 새로 접속해보시기 바랍니다. __404 not Found__ 페이지가 나오지 않으신가요?? `react` 를  `react-router` 와 함께 사용하는 정적 페이지를 가지고 `http://{domain}/{path}` 와 같은 경로로 브라우저에서 바로 접속할 경우 `404` 에러가 발생하게 됩니다. 
+그런데 한번 `{domain}/about` 으로 새로 접속해보시기 바랍니다. __404 not Found__ 페이지가 나오지 않나요? 
 
-그 이유는 __SPA__ 의 경우 `{domain}/about` 도 `index.html` 파일을 연결시켜 라우팅을 시켜야 하는데 nginx 에서 이를 모르고 `/about` 에 맞는 HTML 파일을 찾으려 하기 때문입니다. 즉, 이를 해결하기 위해서는 다른 path 로 접근하더라도 `index.html` 을 제공할 수 있도록 해야 합니다.
+우리가 작성한 프로젝트가 __react-router-dom__ 라이브러리를 이용하는  경우 `http://{domain}/{path}` 와 같은 경로로 바로 접속 하게 되면 `404` 에러가 발생하게 됩니다. 
 
-그럼 다시 `/etc/nginx/sites-available/demo.conf` 의 설정 파일을 수정하겠습니다. 여기서 location 부분을 수정해 주면 됩니다.
+그 이유는 __SPA__ 의 경우 index.html 하나의 정적 파일만을 가지고 있기 때문입니다. 즉, `{domain}/about` 로 접속했을 때도 `index.html` 파일을 연결시켜 라우팅을 시켜야 하는데 nginx 에서 이를 모르기 때문에 `/about` 에 맞는 HTML 파일을 찾으려 합니다. 따라서 이를 해결하기 위해서는 다른 path 로 접근하더라도 `index.html` 을 제공할 수 있도록 해야 합니다.
+
+그럼 다시 `/etc/nginx/sites-available/demo.conf` 의 설정 파일을 수정하겠습니다. 여기서 location 부분에 __try_files__ 디렉티브 부분을 추가시키면 됩니다.
 
 ```bash 
 server{
@@ -136,3 +138,6 @@ server{
 
 ## 프록시 서버 구축하기
 
+이번에는 프록시 서버를 구축하는 방법에 대해서 알아보겠습니다.
+
+## 마무리
