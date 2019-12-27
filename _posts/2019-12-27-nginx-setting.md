@@ -248,7 +248,7 @@ server {
 
 ## 캐시 서버 만들기
 
-웹서버를 사용하는 이유 중에 __캐시 서버__ 로 이용하기 위해서 사용하는 경우도 있다는 것을 말했었습니다. 그러면 __proxy server__ 예시에서 캐시를 적용하는 방법을 말씀드리겠습니다.
+[이전 포스팅](https://kscory.com/dev/aws/eks-efs)에서 웹서버를 __캐시 서버__ 로 이용하기 위해 구축하는 경우도 있다는 것을 말씀드렸었습니다. 그래서 이번 챕터에서는 캐시 서버를 구축할 예정입니다. 이전 챕터의 __proxy server__ 예제를 다시 이용하도록 하겠습니다.
 
 먼저 cache 를 남길 디렉터리 경로를 설정해야 합니다. 기본 설정 파일인 `/etc/nginx/nginx.conf` 파일을 열어 아래 설정을 추가해 주도록 합니다.
 
@@ -271,7 +271,7 @@ http {
 }
 ```
 
-그럼 이제 proxy 로 설정한 config 파일에다가 cache 를 설정해 주도록 하겠습니다. `/etc/nginx/sites-available/proxy.conf` 열어 아래의 설정값으로 수정해 주도록 합니다.
+그럼 이제 proxy 로 설정한 config 파일에 cache 를 설정해 주도록 하겠습니다. `/etc/nginx/sites-available/proxy.conf` 열어 아래의 설정값으로 수정해 주도록 합니다.
 
 ```bash
 server {
@@ -312,18 +312,16 @@ server {
 }
 ```
 
-그럼 테스트 이미지를 이용해서 캐시가 잘 되는지 확인해보겠습니다. nodejs 프로젝트의 image 디렉토리인 `demo-app-express/public/images` 로 이동하시기 바랍니다. 거기서 sample image 를 다운받아 봅니다.
+테스트 이미지를 이용해서 캐시가 잘 되는지 확인해보겠습니다. nodejs 프로젝트의 image 디렉토리인 `demo-app-express/public/images` 로 이동하시기 바랍니다. 거기서 sample image 를 다운받아 봅니다. 이미지가 잘 받아와졌다면 아래와 같이 __354.jpg__ 이름의 이미지가 받아진 것이 보일 것입니다.
 
 ```bash
 # picsum 의 샘플 이미지 다운
 curl -O https://i.picsum.photos/id/83/536/354.jpg
 ```
 
-이미지가 잘 받아와졌다면 아래와 같이 이미지가 받아진 것이 보일 것입니다.
-
 <img src="https://lh3.googleusercontent.com/PWq9Yoyqn0ZgK3c0aaNs42LWFEFzadks1NFxo2tUzOP0m8Xp-vxod8526qxbL63SL146eRYffbDW4Cz1u2g-klHdMK4IqBMqzmp1PnJeFabw5fdfZa4OVs4yYDG3aVCOPriXC2BCKpCROQsPnTJEWc3ipKKfr6pIdX5oGDs0xMG-72PFo7wxgmaX41umOl6s1GFjhLKu23zPHYbr-VLnR6BBomjhzUA38hTBvVhgB1STe0o6ENbftjHm7SGJqsEdjJF4JhyBbuRCnHHuulJrZYKHXMeXZys1VVYGr6fi_6fS5S7rl0wxjJ9v3F_ArgnBwLOUMm3K9yXFeECihHMq9q24ciEdXuvlGfc6qpuLO0Ml6E2bGC3Zgh5R3Nd_1QWinD5E_MZgvDWy3N8ZfWXH7WFqnwmR2XOjdZ7nAMja6KlmSndHW9jxP63_I3H0yE859vut0joTOzx01skSsyimkQSB30phLhQQFbGLsL6t8YUX12l0-I3wsMrkkqD9bPR1DRtkS3ix4-1Kb4gMSlVSx5KJ5XhHw43mGzPPFWiaS_Veb01mAYibFEYzXxTQ1qiAmQH4p35X6Fx9ywfZtjQj6xhwQ772FDiobsxpYvwC76aPjYDD3YZns8BvTCmNnZjr1UY32gV5AHsaWtOg1sSDj9MTi7UfmmmReAbMyYxDvMmMYYFve2IJz4c=w961-h79-no" alt="nginx-setting-05">
 
-그럼 이 이미지를 가져와 보겠습니다. curl 명령어릁 두번 사용해 보겠습니다.
+그럼 curl 명령어릁 이용해서 이 이미지를 가져올 때 캐싱이 잘 되는지 확인해보겠습니다. 같은 명령어를 두번 입력해 주도록 합니다.
 
 ```bash
 curl -I http://54.180.124.48:8080/images/354.jpg
@@ -332,13 +330,15 @@ curl -I http://54.180.124.48:8080/images/354.jpg
 
 <img src="https://lh3.googleusercontent.com/I2ceKatfPJbjjiiFlFgm7RT5DF-hYfeGF3FpU7bCyX24ln_AdlTYIWEtitwx8eGv5qt8Pahucn6L8Nc82s18CEzaP1mr6-qi1r1Ln0xDinqXcmeDNUFHqVJA5wSzbxbtMferLasT5jxW_vRKamZ3D7VL3LGJYOzPEbRwal_gXXzNAhAdReSeoYqPmA6twIrUbahLNgN_iz9QyfX4W3tzW17vi5z56k_Hwi7g7hi3E7G7OYs28zXwLp3DNhlL0l8ef7ABpZzrvuc1ffoZmst4XRneNFZEx24awZ5tsgRxfczGUH5Q3u3JsfvMX314_pMO53zwOiCsbakOoYHjIIG1uqN9yg3CmWghvo1JJXaNgVsvjZoQBmkcf0kcLbaFG3JXvoAODzCaJFQ2jXN-bKJARmrIi_KXdrXxEnqrL6VtZeDa1538HWS4T_QLMrqjuoPt8ymAXK8GsdJNqrmwaDqAbgm4fyEYbToserDsOHYHQXtlEtbEgJK2Vvo1fMyLueoUfzzYe_ed9XqXD6aQI9pSOSu-RGoW8c_SwtQhXgafCNBUZlmbUQA8t5RiCPnQuf8c_0OY1M0bGDVAV80BNFCOCG8P7HG5tPWQJtH74w3UTjTtqHzHwB-Zl2o67YVZBjY_sfazgDjDXhx18R-zsvTQE_V78JPTpp3ELqbND2Lq577L9PooHx6ezCA=w727-h528-no" alt="nginx-setting-06">
 
-저희는 캐시 설정에서 `add_header X-Proxy-Cache $upstream_cache_status;` 설정을 했기 때문에 __X-Proxy-Cache__ 를 보게 되면 처음엔 캐시가 되어 있지 않아 __MISS__ 를 반환하지만 그 이후부터는 캐시된 것을 받아들여 __HIT__ 를 반환하게 됩니다. 한번 웹사이트에서도 확인해 보겠습니다.
+저희는 캐시 설정에서 `add_header X-Proxy-Cache $upstream_cache_status;` 를 통해 header 에 __X-Proxy-Cache__ 설정을 했습니다. 이는 캐시를 사용했는지 여부를 알 수 있는 헤더인데 처음 명령을 확인해 보면 캐시가 되어 있지 않아 __MISS__ 를 반환하는 것을 알 수 있습니다. 하지만 다시 명령어를 입력하게 되면 캐시된 이미지를 반환하기 때문에 __HIT__ 가 헤더에 있는 것을 알 수 있습니다. 즉, 캐시가 잘 되었다는 증거입니다. 
+
+웹사이트에서도 확인해 보겠습니다.
 
 <img src="https://lh3.googleusercontent.com/HpyQkzxSD2PFdET7L4wxgeXvTQ6L2UXyZ5WWNrSVm963qgxAbn5vxp56CkOgAr35OBqW6WC8NwoOM7Tbd6ROFTFp-HtKkXvzY2ERYkypx6q63euLm1NT9nozK_-rIWF88Y5DmKYNIUET6Mv7Pm9Y-ylwP2S2DXJUmPIq61Fz7l4Zq-CYyxfW3PbLTXRyAWQYalh6vdbNmqTudPzb95nXd8R1ss6xVwWJVGYEKYZyKAYrDOFlBZIX2Nd3S0xXnR9lWJK-llbW0nbDD0kuC5WjVoEb-BIDfYegzb2bEqtchpApKaoAGNzMMtGsGVaVFCH7yP8BcMAdQ3nNz5bqQH56bXTdM8e_CPYLOJQLzu7idamK4ZYo1fpuJKzQ6Dl_9c4H-xZWFwScTgqpqnX4FgjJa_skCKO8Us99CtGDGBSuySphqKgXjIUQMbSNZz2KvIbfkafWrSo1ETp4eCU-B91qEQmUFTsMyV09myvw-mk_UrD1WXyIs15-TXMZHNotZanE0Y8gTdFVXo-kgAmjJCiEeox635IkzoIEF9CKlkmUcmLIsfXMJ3ScAYBmcjEdmukJjxEsGDkuI4fwjFU3K1Ts1J7Ks6hlcHUjJg8GQq-74QWl6T68gWKowmHYJAtLjr6BYcyk9v68P9GEODf56nD7_N5AVVUkdXRfwgK0_gIsQsUoUoAX4qcFzf0=w1032-h495-no" alt="nginx-setting-06">
 
-오른쪽 탭을 보면 __전송됨__ 설명에서 __캐시됨__ 이라고 적혀 있으며 HTTP Status 코드도 __304__ 로 잘 전달되고 있는 것을 알 수 있습니다.
+오른쪽 화면을 보면 __전송됨__ 탭에서 __캐시됨__ 이라고 적혀 있으며 HTTP Status 코드도 __304__ 로 되어 있습니다. 캐시가 잘 되고 있네요.
 
-그럼 저희가 지정한 path 에 캐시가 잘 저장되어 있는지 확인해 보겠습니다. 아래 명령어를 실행해 보세요
+이번에는 저희가 지정한 path 에 캐시된 데이터가 잘 저장되어 있는지 확인해 보겠습니다. 아래 명령어를 실행해 보세요
 
 ```bash
 # 캐싱된 파일 확인
@@ -349,7 +349,7 @@ sudo grep -rnw '/var/cache/nginx/cache/' -e "354.jpg"
 
 바이너리 파일로 잘 캐싱된 것이 보인다면 잘 작동하고 있다는 뜻입니다. 
 
-이번 챕터에서는 간단히 캐시서버를 만드는 방법에 대해서 알아보았습니다. 사실 캐싱 전략은 여러 종류가 존재하기 때문에 각자의 rule 에 맞춰서 잘 조절해보시기 바랍니다. 개개인마다 다르게 cache 하고 싶다면 __proxy_cache_key__ 디렉티브 부분을 참고하시면 될 것이고, 특정 path 마다 캐시 전략을 달리하고 싶다면 __location__ 부분을 추가시키면 될 것입니다. 
+이번 챕터에서는 간단히 캐시서버를 만드는 방법에 대해서 알아보았습니다. 사실 캐싱 전략은 여러 가지로 존재하기 때문에 각자에게 맞는 rule 에 따라서 잘 조절해보시기 바랍니다. 혹시 로그인 된 사용자마다 다르게 cache 하고 싶다면 __proxy_cache_key__ 디렉티브 부분을 참고하시면 될 것이고, 특정 path 마다 캐시 전략을 달리하고 싶다면 __location__ 부분을 추가해서 새로운 rule 을 적용하면 될 것입니다. 
 
 ## 참고사항 (server, location 우선순위)
 config 파일에서 server 블럭과 location 블럭은 여러개가 될 수 있습니다. 그렇기 때문에 중복해서 사용했을 때 우선순위를 모른다면 생각한 대로 동작하지 않을 수 있습니다. 즉, 순서에 관계 없이 nginx 는 아래에 나와 있는 순서대로 라우팅을 시키게 됩니다. 물론 같은 순위라면 위부터 먼저 읽게 됩니다.
@@ -376,11 +376,11 @@ location 우선 순위
 5. 연산자 없는 일반 선언
    - ex> `location /demo/about {}`
 
-그런데 이 때 만약 location 블락을 중첩해서 사용한다면 원하는 방식대로 사용할 수도 있습니다. 
+이 때 만약 location 블락을 중첩해서 사용한다면 원하는 방식대로 사용할 수도 있습니다. 
 
 ## 마무리
 
-이번 포스팅은 좀 길어진 것 같습니다. 항상 쓰던것만 쓰고 이렇게 정리하려 하니 생각보다 할 것이 많더군요. ㅜㅜ 아직 nginx 를 이용한 몇 가지 포스팅이 남은 것 같습니다. __SSL 적용하기__, __Load Balancer__ 로 활용하기, kubernetes 의 __nginx ingress__ 등이 있을 것 같네요. 시간이 나는 대로 틈틈히 포스팅 해야겠습니다.
+이번 포스팅은 좀 길어진 것 같습니다. 항상 쓰던것만 써왔는데 막상 정리하려 하니 뒤죽박죽으로 생각나더군요. ㅜㅜ 하지만 아직 nginx 를 이용한 몇 가지 포스팅이 남은 것 같습니다. __SSL 적용하기__, __Load Balancer__ 로 활용하기, kubernetes 의 __nginx ingress__ 등이 있을 것 같네요. 시간이 나는 대로 틈틈히 포스팅 해야겠습니다.
 
 ## 참고 자료
 
