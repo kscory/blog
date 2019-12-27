@@ -297,7 +297,7 @@ server {
     proxy_cache_valid 200 302 20m;
     # 404 에러 코드는 20분간 캐싱
     proxy_cache_valid 404 20m;
-    # X-Proxy-Cache 헤더에 HIT, MISS, MYPASS와 같은 캐시 적중 상태정보가 설정
+    # X-Proxy-Cache 헤더에 HIT, MISS, BYPASS와 같은 캐시 적중 상태정보가 설정
     add_header X-Proxy-Cache $upstream_cache_status;
     # Cache-Control 은 public 으로 설정
     add_header Cache-Control "public";
@@ -347,7 +347,7 @@ sudo grep -rnw '/var/cache/nginx/cache/' -e "354.jpg"
 
 <img src="https://lh3.googleusercontent.com/BYYozMMFaUYGhrm6T97wx3j3hy1bPBxV6WYfN8cKyQDpWg0vvYgqtRV47jUPNxBE473qqNyiZm3t2QsjIeKbSjJgNg16Nnk3VobxfUTcBMM2wsIUPZzXQTeIbsphvwDdRGRyXWGsfS5fMw9n39BfqUr_Uy2uSalh-DoZBTFDP1XLQ6VZ_NqnNijHDHgOh8jVBiXbETJ-yBqkO-dvZYe-oIOtSKlEYj_024eWfMGlGb8zaOjIcVc1tbSkBjybywLOL88jgMkHnnA5AFve82CuOKcEFeRVs3Q951FHxjjR1kM1jQXGBMAec-RbI1SRPfyNrQqMaKfg2bdjYECY1xuT6q468PGaDtl_ypCSbwoVGTsKFX8lgq5nJzjSZK4cINSSP0MJJACJowzoVzTMenc6xoiPKfECUkMPZGFYZVTZsJmYkrDcVbq4HZsRUWWno54TMb7aceLjiTqbtxR4JL9nn7kLiShzxS8W4z3facSvdhSzNbz5HgBH0T_VP_eUTV7A5hiit4dis_cNHE0tcJ6142_ZzNjleVIe7HEYU4sVguX3MNbrezZFlkX4nuIc9pRhI4fieS3sn5hiFmp_7XsjyitjK5lPaUx0Sz0JgTjYWn_l6qAFriFuLvyauzQoC4oe6jR0Al2d33NsN1iDKUoRx2KLOlrKV9P-iFZmzAXIEbIVZ3VJwjDDGJ0=w949-h34-no" alt="nginx-setting-06">
 
-바이너리 파일로 잘 캐싱된 것이 보인다면 잘 작동하고 있다는 뜻입니다. 
+바이너리 파일로 캐싱된 것이 보인다면 잘 작동하고 있다는 뜻입니다. 
 
 이번 챕터에서는 간단히 캐시서버를 만드는 방법에 대해서 알아보았습니다. 사실 캐싱 전략은 여러 가지로 존재하기 때문에 각자에게 맞는 rule 에 따라서 잘 조절해보시기 바랍니다. 혹시 로그인 된 사용자마다 다르게 cache 하고 싶다면 __proxy_cache_key__ 디렉티브 부분을 참고하시면 될 것이고, 특정 path 마다 캐시 전략을 달리하고 싶다면 __location__ 부분을 추가해서 새로운 rule 을 적용하면 될 것입니다. 
 
