@@ -53,7 +53,7 @@ sudo mkdir /var/log/nginx/demo/
 그 후 `demo.conf` 파일을 열어 아래와 같이 작성해줍니다.
 
 ```bash
-server{
+server {
   # 서버 포트를 80 번으로 오픈
   # - [::] 는 ipv6 를 오픈한다는 것인데 에러가 날 수 있으므로 끄는 것이 좋다.
   listen  80;
@@ -114,7 +114,7 @@ sudo service nginx restart
 그럼 다시 `/etc/nginx/sites-available/demo.conf` 의 설정 파일을 수정하겠습니다. 여기서 location 부분에 __try_files__ 디렉티브 부분을 추가시키면 됩니다.
 
 ```bash 
-server{
+server {
   listen  80;
   server_name {nginx server ip 혹은 domain 설정};
 
@@ -128,7 +128,8 @@ server{
     # try_files 는 최하위 우선순위를 갖는 슈도 location 블럭을 생성한다.
     # - 특정 uri 로 들어왔는데 매칭되는 것이 없는 경우 index.html 을 보낸다.
     try_files $uri $uri/ /index.html;
-  }  
+  }
+}  
 ```
 
 이제 `{domain}/about` 으로 접속했을 때 아래처럼 실행 된다면 성공입니다!! (nginx 는 다시 실행시켜 주세요)
