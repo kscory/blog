@@ -11,9 +11,10 @@ tags: webserver nginx loadbalancer
 
 사실 요즘 __Loadbalancer__ 기능을 __HAProxy__ 혹은 __Envoy Proxy__ 를 사용해서 구축하는 경우가 더 많다고는 합니다. 가장 큰 이유가 __health check__ 기능을 이용하려면 오픈소스만으로는 안되고 [nginx plus](https://www.nginx.com/) 을 구매해서 사용해야 하기 때문일 것입니다. 그래도 nginx 는 로드벨런서 기능을 쉬우면서도 강력하기 때문에 알아둘 필요성은 있습니다. 
 
-> 이번 포스팅은 __ubuntu 18.04__ 기반으로 진행할 예정이며 sample app 으로 express app 두개를 사용하도록 하겠습니다. 
+`이번 포스팅은 __ubuntu 18.04__ 기반으로 진행할 예정이며 sample app 으로 express app 두개를 사용하도록 하겠습니다.`
 
-> 이 포스팅은 nginx 설치와 proxy 설정에 대해서는 설명하지 않을 예정이니 궁금하신 분들은 이전 포스팅들을 참고해주시면 감사하겠습니다.
+`이 포스팅은 nginx 설치와 proxy 설정에 대해서는 설명하지 않을 예정이니 궁금하신 분들은 이전 포스팅들을 참고해주시면 감사하겠습니다.`
+
 
 ## 데모 앱 띄우기
 
@@ -85,7 +86,7 @@ upstream express-app {
 
 그런데 뭔가 이상하지 않나요?? 왜 __Second App__ 은 건너뛰고 __Third App__ 으로 로드 벨런싱이 되었을까요?? 사실 이상한게 아니라 아무런 설정을 하지 않으면 __1. 라운드로빈 방식__ 으로 진행되는데 저희 express app 은 __2. 정적파일__ 을 가지고 있기 때문입니다. 즉, 로드 벨런싱이 잘 되었다는 말이죠. 한번 아래 사진을 확인해보겠습니다.
 
-<img src="https://lh3.googleusercontent.com/qQuN8hFbtTpeEsTLaXgS7F7EmatLVcAJHlL2RMl-pYVAX0wXltjuJzFZLW_ciCSNAT96e8tq5cNewMZzfwaWFshtZeP0uaW73LTBb1pE9rX-DLsJxZsVKGnsiJ2va1Iep33-kUly8z4sLQmFhhQWdiuonSYff_5un4SNQDmmMSQgTnb0ovTlhmZiNePIq5sfM62sZrIDfBKPvIHR5jqy2jGcHQvqe3NLtgVfH_xT4Y8_-PwKhJcLBW1pGvDoruxPRLFjSuUxlD7y9syHSSswj8BP8fV0goAsSSnbrxWYzuuEAQED2GPFlC01uWGP5_dtcVGTB98rFGVh4PfKQlnhqrwpoPtktsXcg3vqjDLKNGY5H8VnMF84hETRhWkEl35W-BgZP2PlKupdHEzjUpA4IHMWnWrMpm0NzhHOEoLTi51M4z0Lan3JWJHc0a_yrl53wiM8WC_H05eqdh7nj1adtzx547Y1BEKdhVO0ZKb-xUc7E37A0P8qav909Z6NzycMPsTDfoQmgCESa5iWERlN7glLfyr-8IAUW-IblJLCieaDJTI2tyWvl6z3i7LtuYUMhQr_qwodpYlnzPM9bupu8uQ8Hj82I6Pby1nb5bQiu29O9YTXeWNR4LeY_nkPwnD-5s8yFT_koV8TUfoSdp01t2-j_UtkGKXjjTfgasMBu0t-JX0zaBqQT34=w959-h181-no" alt="nginx-loadbalancer-03">
+<img src="https://lh3.googleusercontent.com/fxcCmYpjojxbnHC439wxM0O87-svONpm7OymiQfNcR4lEY8v9Ih6szdhhMBEMZeViC24Cut_GW2Fnl-CtZLH0-C_JeEPdComqKoXlwxkv1Ui7aHvzfSBQRzbe8KsoxAPcntP_AkkXpHC5AxriAdcH0R9yN2d9zfwlHIgkqR0H8eNKPAv06ooenKTPrZnF1e2vim2VPt-c2xbQhamHiTJFL1-phiSyIlx2TuyQJFk4zK74BQmbKR9BaCCcyMupAbHv27pLuaRYKFFMGOOklZV0AuJSa7oiV_QYEv8y0-KmHs2fWXoB3IbM23wGYTONJeJmTKiODOq1asVQC7qw7Fiu0VCOCpk21H4QrR16buJqxJdjlKukUqKQXyjlYtDDFjWaiPAIOFCA-JzJNBQJD_YIi_6WKW16ZUWXgbLXpmXN_Rp_6EbzExzbf9ir3FZK2UfXTWv0DiUP1eUbcxQeX_Z2oAxDQevPS549CpT5Myc6wqMYizv1mddnGCcteaCAVv_rIJrlYjwyqiAM0ntRKvBdXrpM_NFX_wQbpMlmvvbJXEZ5aiR4CSKY57YKqBlkyBFwFQEoKCmAb3y0WeBv9vYfw7jy5pw11TXvHXKkVj1qSki0D-4QjACQXVwPU1gbDGwQg3T0wjVYiA2EiJ4og6KIAEqfidq7CJv_IUZIXYLp-zOJCq-OXKyKWs=w1216-h310-no" alt="nginx-loadbalancer-03">
 
 그림에서 설명했듯이 __처음 get__ 요청에 대한 응답은 __demo app1__ 에서, 그다음 요청인 __get styles.css__ 요청은 __demo app2__ 으로 전달되며, 로드밸런싱이 잘 되는 것을 알 수 있습니다.
 
@@ -94,6 +95,7 @@ upstream express-app {
 ## nginx LoadBalancing config
 
 ## 마무리
+
 
 ## 참고 자료
 
