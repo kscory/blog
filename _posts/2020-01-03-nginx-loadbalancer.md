@@ -22,42 +22,44 @@ nginx 를 들어가기 전에 demo app 을 다운받아 각각 다른 프로세�
 
 ```bash
 # 데모 앱 클론
-git clone -b demo-nginx-loadbalancer-app --single-branch https://github.com/Lee-KyungSeok/blog-sample-projects.git
+$ git clone -b demo-nginx-loadbalancer-app --single-branch https://github.com/Lee-KyungSeok/blog-sample-projects.git
 
 # 첫번째 demo app 실행
-screen -S demoapp-1
-cd blog-sample-projects/demo-app-express-1
-npm install
-PORT=7000 npm start
+$ screen -S demoapp-1
+$ cd blog-sample-projects/demo-app-express-1
+$ npm install
+$ PORT=7000 npm start
 # 실행 후 "control + a + d" 로 빠져 나오기
 
 # 두번째 demo app 실행
-screen -S demoapp-2
-cd blog-sample-projects/demo-app-express-2
-npm install
-PORT=8000 npm start
+$ screen -S demoapp-2
+$ cd blog-sample-projects/demo-app-express-2
+$ npm install
+$ PORT=8000 npm start
 # 실행 후 "control + a + d" 로 빠져 나오기
 
 # 두번째 demo app 실행
-screen -S demoapp-3
-cd blog-sample-projects/demo-app-express-3
-npm install
-PORT=9000 npm start
+$ screen -S demoapp-3
+$ cd blog-sample-projects/demo-app-express-3
+$ npm install
+$ PORT=9000 npm start
 # 실행 후 "control + a + d" 로 빠져 나오기
 
 # 프로세스 확인
-ps aux | grep demo
+$ ps aux | grep demo
 ```
 
 이 앱은 express generator 로 간단하게 만들어진 앱으로 아래 사진과 같이 단순히 First App, Second App, Third App 이라는 html 페이지를 보여줍니다.
 
 <img src="https://lh3.googleusercontent.com/JGndeF_7s9q2rD5h5GYhPx3cZpxmtSyx7WHDyUzLZY9zm28A1BS6mqRxU7cJpD4mFA3G1jzoZoQ5hDdNsvOEUaf7o9F_aH48xwmBZdsCq79nCF-BBMK_V4if166Wbly9tFWSlENrq0KFUqyE4_PjwXEhz1bgd13htfUenYVQiUp5kRQH5RceewmSgKdxWDTNec4ZmcFOXHyGpujYYCn-4JFSEW-s1tiyUCf5ACBfFISSbLdNvgY7iqP-60XcV6rH79IBXymerv3VC3S2jDKwYB4R5VJmzj-VVYvki4_BkjF7cyyNFQwMgrWYkD1gRT3-hRTcJJULVsYwuKUs14aZFKcbDTPg8FnP7vXuJWdFAMUzH0_jVNGHIHLONcU1uKa9KDlQtHousfGiHLRDnkyFclpLj7MG6pUDTCGUx964oEYiHx5usXqPodQzIUjQt7NEK9qTo5duDs7uDpb9XMH4MKfBkqXXTjcM9Yw_Srwte0FHEWbsLEC7jWAMEGdKBcBrDOebWQeB-LbmsSGEeKuWWF6Osrzj0HH1Rnoht4O96aTgOzwnO8HliXzXrZ44HTeWSdgi1QFLLc8uYVz9U8lTDYtt3o0mNSLjjMxTdNuniBlH8E8kyJWPF-_sdmHa9Arccxahp0JX3ZxM5oGCzXpVgQuXWmdi_h-EEmwg-wztI7_HMd9CLhdS1tQ=w1680-h456-no" alt="nginx-loadbalancer-01">
 
-이제 이 앱을 이용해서 first app, second app, third app 으로 로드 벨런싱 되는 과정을 설명하겠습니다.
+이제 이 앱을 이용해서 first app, second app, third app 으로 로드 벨런싱 되는 과정을 설명할 예정입니다.
 
-## nginx 설정하기
+## nginx 설정
 
-이전에 설정했던 것과 마찬가지로 `/etc/nginx/sites-available/proxy.conf` 파일에 적용하도록 하겠습니다.
+nginx 에서 로드벨런싱을 적용하는 법은 간단합니다. __upstream 블락__ 을 만들어서 어던 서버로 로드벨런싱 할지 정해주면 됩니다. 즉 저희는 __express-app__ 이라는 upstream 을 만들고 각각의 앱에 연결한 다음 __proxy_pass__ 를 이용해 __80__ 포트로 들어왔을 때 이 upstream 으로 전달하도록 하겠습니다.
+
+이전과 마찬가지로 `/etc/nginx/sites-available/proxy.conf` 파일을 열어 내용을 작성하겠습니다.
 
 ```bash
 server {
@@ -90,12 +92,134 @@ upstream express-app {
 
 그림에서 설명했듯이 __처음 get__ 요청에 대한 응답은 __demo app1__ 에서, 그다음 요청인 __get styles.css__ 요청은 __demo app2__ 으로 전달되며, 로드밸런싱이 잘 되는 것을 알 수 있습니다.
 
-그럼 다음 챕터에서 nginx loadbalancing config 를 수정하여 이런 점들을 고쳐보도록 하겠습니다.
+다음 챕터에서 nginx loadbalancing config 를 수정하여 이런 점들을 고쳐보도록 하겠습니다.
 
 ## nginx LoadBalancing config
 
+이 챕터에서 nginx load balancing config 에 대한 설명을 드리고 수정해 나가겠습니다.
+
+아무것도 설정하지 않으면 __라운드 로빈 방식__ 이라고 말씀드렸었습니다. nginx 에서는 아래 세 가지 방식을 지원합니다.
+
+1. round-robin: 라운드 로빈방식으로 서버를 할당
+2. least-connected:  커넥션이 가장 적은 서버를 할당
+3. ip-hash:  클라이언트 IP를 해쉬한 값을 기반으로 특정 서버를 할당
+
+저희는 커넥션이 가장 적은 서버를 할당하도록 하겠습니다.
+
+```bash
+server {
+  # 생략...
+}
+
+upstream express-app {
+  # least-connected 설정
+  least_conn;
+
+  # IP hash 기반으로 하고 싶은 경우 아래로 설정
+  # ip_hash; 
+
+  server 127.0.0.1:7000;
+  server 127.0.0.1:8000;
+  server 127.0.0.1:9000;
+}
+```
+
+여기서 특정 옵션들이 사용될 수 있습니다. [생활코딩](https://opentutorials.org/module/384/4328) 에서 정리한 표를 가져오겠습니다.
+
+- __weight__=n: 업스트림 서버의 비중을 나타낸다. 이 값을 2로 설정하면 그렇지 않은 서버에 비해 두배 더 자주 선택된다.
+- __max_fails__=n: n으로 지정한 횟수만큼 실패가 일어나면 서버가 죽은 것으로 간주한다.
+- __fail_timeout__=n: max_fails가 지정된 상태에서 이 값이 설정만큼 서버가 응답하지 않으면 죽은 것으로 간주한다.
+- __down__: 해당 서버를 사용하지 않게 지정한다. ip_hash; 지시어가 설정된 상태에서만 유효하다.
+- __backup__: 모든 서버가 동작하지 않을 때 backup으로 표시된 서버가 사용되고 그 전까지는 사용되지 않는다.
+
+저희는 __demo-app-1 에 가중치 2__ 를 두고 __5번의 실패 확인__, __실패 후 30초 응답시간 설정__, 마지막으로 __demo-app-3는 모든 앱이 죽은 경우에만 사용__ 하도록 하겠습니다.
+
+그럼 설정값을 다시 바꾸겠습니다.
+
+```bash
+server {
+  # 생략...
+}
+
+upstream express-app {
+  least_conn;
+
+  server 127.0.0.1:7000 weight=2 max_fails=3 fail_timeout=30s;
+  server 127.0.0.1:8000 max_fails=3 fail_timeout=30s;
+  server 127.0.0.1:9000 backup;
+}
+```
+
+마지막으로 저희는 proxy 방식을 사용했는데 이 때 에러처리할 항목을 추가해 주도록 하겠습니다. 이제 최종 config 파일의 항목은 아래와 같을 것입니다.
+
+```bash
+server {
+  listen  80;
+  server_name {nginx server ip 혹은 domain 설정};
+
+  access_log /var/log/nginx/proxy/access.log;
+  error_log /var/log/nginx/proxy/error.log;
+
+  location / {
+    include /etc/nginx/proxy_params;
+    proxy_pass http://express-app;
+    proxy_next_upstream error timeout invalid_header http_500 http_502 http_503 http_504;
+  }
+}
+
+upstream express-app {
+  least_conn;
+
+  server 127.0.0.1:7000 weight=2 max_fails=3 fail_timeout=30s;
+  server 127.0.0.1:8000 max_fails=3 fail_timeout=30s;
+  server 127.0.0.1:9000 backup;
+}
+```
+
+완성되었으면 nginx 를 재실행시켜 줍니다!!
+
+아마 아무리 해도 __first app__ 과 __second app__ 이 돌아가면서 나올 것입니다.
+
+그럼 이번에 __backup__ 을 확인하기 위해 돌아가고 있던 두 개의 앱을 죽이겠습니다. 포스팅을 따라 오셨다면 서로 다른 프로세스로 띄웠습을 알 수 있습니다. 이 두개의 프로세스를 죽이도록 하겠습니다.
+
+```bash
+# demo-app-1 프로세스 죽이기
+$ kill -9 `ps -ef | grep demoapp-1 | awk '{print $2}'`
+
+# demo-app-2 프로세스 죽이기
+$ kill -9 `ps -ef | grep demoapp-2 | awk '{print $2}'`
+```
+
+이제 다시 접속해주세요!!
+
+<img src="https://lh3.googleusercontent.com/483tvQ1AKJ6SFKRLNJ6elzR-A_FvQbBNtHNLkCa8G2sp2HFLz7o70PjJAa3nf0pOYscIVkcgWq8i_nC3GLElNA33JHDuaPwXx1e2EEfXs3qfdqxkc5CgcR745YdpPGzoZnvLOwK7O84yyKxOMVhs8uiM-QNvTKwFo7zYNVIfNunbP6zJgFnvxjqO9vBN_S-Iy4uxwW732kEHp-lVTWs136130yG1DDfXyvLmxm9VwmkNpICs2nXLGjAZ-O5N5zyh4e5SMsSjpxMpvhAxXFiqB2uVo1gPTCPSXSpghB1arZMlEyQ6zed9-gTOBnVE87scq-nq3yTJ1DoHiY74aMRWwVOgEi-MA0QbdvdvKd226B0L0pzwfhJ5e4nJc8xxPAcOydAVhZvbLAML8v2GKnU5fddckwEGumYJi5xl3ftvz57-AaxhriifJ6BfIpyVeZYD3ar7-kqADHl71SOpDJEA0U6vdqTeNAUXH8fbEV5N7pKgfxNTeimhHeZZsFvGExdJFfxROAZ_2i5qJj7i7LlMdM6chcZP6OLNIOfJf0fIEAWZrQ24tkROFRCyAmV3JISksM-vYo4HW0ryoY1q0kBixs6x8zFNwkSeTk0eHJJbKu98RacaHerCkuBJXAQhxfgZ_hrvQ2YkeDsi3RebErNRo8KAXROey1EITDqub8xmnKZaubIZrdFHMwU=w1680-h550-no" alt="nginx-loadbalancer-04">
+
+아무리 접속해도 위 스크린샷 처럼 Third App 만 나올 것입니다.
+
+마지막으로 connection 이 중지되었는지 확인하겠습니다. nginx 설정에서 에러는 `cat /var/log/nginx/proxy/error.log` 에 저장하도록 했으니 아래 명령어를 이용해서 어떤 에러가 발생햇는지 확인하겠습니다.
+
+```bash
+$ cat /var/log/nginx/proxy/error.log
+```
+
+아래 사진처럼 upstream 에러가 발생하시면 설정이 잘 된 것입니다.
+
+<img src="https://lh3.googleusercontent.com/u3xUkBqGOFLzFAeJG-Hb6LmOevxYmAw6Kkg37KHz-1MtCvEPqLmT1EY0RxGf2lUUht1r9QvJNyuwEbem9orFTL4z-E4Ze-QHhZWB8f-CQ99vh5CdYeAfJIJocmLnWrCusXi7PpDAxTtkfq7jWW3nV6e_1nfUwtUIoMTCmObDT5zbzmMki5YiCnaobpMQV6Xd_ZsL43Ahoz-wtA5xcqIXsocebqIoDTqIN0cBga1tdVRo6jTCKCUnDVJ68J-TlHWcAlK8hGlY5DHhU5uXFkfEl3NEYME9hJJuDOCV_dI3NLfeLV7lw0frMYGlKze_sHNWX6zlPfxW3Si534-fLNCXXJwZxTTyEqdNpMXes0PhyO6u6E1JPFH3J2iIBMNJ9oitHdmpBiRdDPdLW07AW1_2tEMKHoBXVSECmuZYvtTmCjqnp9vkwuwgt5mD3Jz-G4ZWZ-KDo82QzFwemt2F8c9zjM8qG8TxnLxX_oJ76C89BgL1exyN_EnxS_X1naCTG3Yp5xKU4oKEGI3a09nJsD_jzSo-wg6yC_J7DRuVfTtvtNzeVWEKCrC9Rf54lhAJeqIU9RUK_5twEUjuZ9H-E3mMeE7HDmGfZKDJ7O_9xm3UG-P-vgZXe5LG_9jaWUlSGiJh1Xu-FRVjbOwx8KgYThuTAQPWJzDAiTTvWiyk1zyK7-ie6iH0LQK2VfQ=w1680-h362-no" alt="nginx-loadbalancer-05">
+
 ## 마무리
 
+사실 어떻게 보면 이번 포스팅은 proxy 서버구축의 연장선상에 있다고 해도 무방하다고 생각합니다. 그래서 그런지 이번 포스팅은 조금 빨리 끝낸 느낌이 있군요. 
+
+이 로드 벨런싱 기능 덕분에 __kubernetes__ 의 공식 ingress 도 nginx 로 되어 있지 않나 합니다. 만약 이 설정방법을 모른다면 아무리 kubernetes 를 이용한다고 해도 커스터마이징은 힘들겠죠??
+
+한번쯤은 이렇게 기본적인 부분들을 보는 것도 도움이 되지 않나 싶습니다.
 
 ## 참고 자료
 
+http://nginx.org/en/docs/http/load_balancing.html
+
+https://www.lesstif.com/pages/viewpage.action?pageId=35357063
+
+https://opentutorials.org/module/384/4328
+
+https://seokjun.kim/haproxy-and-nginx-load-balancing/
