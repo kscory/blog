@@ -84,7 +84,7 @@ proxy_request_buffering off;
 proxy_buffering off; # Required for HTTP-based CLI to work over SSL
 ```
 
-설정 했으면 ssl config 를 설정합니다. 이 파일은 `/etc/nginx/snippets/ssl-params.conf` 에 위치합니다.
+그 다음으로 ssl config 를 설정합니다. 이 파일은 `/etc/nginx/snippets/ssl-params.conf` 에 위치합니다.
 
 ```bash
 ssl_protocols TLSv1.3;# Requires nginx >= 1.13.0 else use TLSv1.2
@@ -107,7 +107,7 @@ add_header X-XSS-Protection "1; mode=block";
 
 마지막으로 proxy를 위한 nginx 설정을 합니다. 파일은 `/etc/nginx/sites-available/proxy.conf` 에 위치합니다. 
 
-아래에서 주목해야 할 디렉티브는 __proxy_redirect__ 부분입니다. 이 설정은 jenkins 에서 응답이 redirect 로 일어났을 때 그대로 클라이언트에 전달하게 되면 localhost 를 클라는 접속하게 됩니다. 따라서 jenkins 에서 redirect 가 일어났을 경우 우리가 원하는 url 로 변경해서 전달하도록 하는 설정입니다.
+아래에서 주목해야 할 디렉티브는 __proxy_redirect__ 부분입니다. 이 설정은 jenkins 에서 응답이 redirect 로 일어났을 때 그대로 클라이언트에 전달하게 되면 localhost 로 클라가 접속하려 하게 됩니다. 따라서 jenkins 에서 redirect 가 일어났을 경우 우리가 원하는 url 로 변경해서 전달하도록 하는 설정입니다.
 
 ```bash
 server {
@@ -168,7 +168,7 @@ sudo service nginx restart
 `/etc/default/jenkins` 설정파일을 열어 __JENKINS_ARGS__ 부분을 아래처럼 수정합니다.
 
 ```bash
-# --httpListenAddress={jenkins 의 ip address}"
+# "--httpListenAddress={jenkins 의 ip address}" 추가
 JENKINS_ARGS="--webroot=/var/cache/$NAME/war --httpPort=$HTTP_PORT --httpListenAddress=127.0.0.1"
 ```
 
