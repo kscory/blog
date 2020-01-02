@@ -86,25 +86,25 @@ upstream express-app {
 
 <img src="https://lh3.googleusercontent.com/iqRe4uWj5t0045phB35ge0EXFh-xuOmwkpyxGlQmUW_psCMfO1gaEODgQ8xfTOhXkkveQ-Xx6S1F8fEvx2rQK5wedbrwoWVZznZJbTXzqqzbbXPXjfBB4pYgh8wxusFUJB7NEd-690kt0N7nCVSCmfOgwZI3PO5P_OjoAslV0HgDDSxfGxjkYwOQB9oPCyQXEoHItFYj1dcPokBJ9d7mUapJ-VTKma7yYIWr8hmh1hw4niPZ5Ek70tCBoJFbb7Gi_fZzaKxMMq6KIE9SaWel4jiY3CZUxZqNYXyvM9UYJWD1MjXG7oU1QrbGvoj5W0qMTaTobHgtaExqC_yXZWEAJ8j_gykht4X6UVvKK9shEHQrNdv1aAZttp70ADmemEnzJzTfs2FLkJe_floa_mYzrv6GigebcWmogZPGjaanOGo7U5obAAM14vbUWmB4wRHUZ6_tASGWqpGKK8vb1PCuMlu4_zsiqqj7WDWMq6kP9vxBBJDHsm4524DR2gXZm2LcLNxgnjR6HAPi3mdkYvVO22KeQZulK7gZo68twUB9wQPc9TaHCvUAuI-FzVliKRdmS9g_4p1SrQLISG0EtBGwZTefdCI7H3YanK7Wp0Hu2b6NcHI-P_e0jGQAluluhVBad_6A9orH5qRoG0PCBHBazYbdqOfzL50cQExpNot9c8U9KqAfHY3v1UU=w1680-h512-no" alt="nginx-loadbalancer-02">
 
-그런데 뭔가 이상하지 않나요?? 왜 __Second App__ 은 건너뛰고 __Third App__ 으로 로드 벨런싱이 되었을까요?? 사실 이상한게 아니라 아무런 설정을 하지 않으면 __1. 라운드로빈 방식__ 으로 진행되는데 저희 express app 은 __2. 정적파일__ 을 가지고 있기 때문입니다. 즉, 로드 벨런싱이 잘 되었다는 말이죠. 한번 아래 사진을 확인해보겠습니다.
+그런데 뭔가 이상하지 않나요?? 왜 __Second App__ 은 건너뛰고 __Third App__ 으로 로드 벨런싱이 되었을까요?? 
+
+사실 이상한게 아니라 아무런 설정을 하지 않으면 __1. 라운드로빈 방식__ 으로 진행되는데 저희 express app 은 __2. 정적파일__ 을 가지고 있기 때문입니다. 즉, 로드 벨런싱이 잘 되었다는 말이죠. 한번 아래 사진을 확인해보겠습니다.
 
 <img src="https://lh3.googleusercontent.com/fxcCmYpjojxbnHC439wxM0O87-svONpm7OymiQfNcR4lEY8v9Ih6szdhhMBEMZeViC24Cut_GW2Fnl-CtZLH0-C_JeEPdComqKoXlwxkv1Ui7aHvzfSBQRzbe8KsoxAPcntP_AkkXpHC5AxriAdcH0R9yN2d9zfwlHIgkqR0H8eNKPAv06ooenKTPrZnF1e2vim2VPt-c2xbQhamHiTJFL1-phiSyIlx2TuyQJFk4zK74BQmbKR9BaCCcyMupAbHv27pLuaRYKFFMGOOklZV0AuJSa7oiV_QYEv8y0-KmHs2fWXoB3IbM23wGYTONJeJmTKiODOq1asVQC7qw7Fiu0VCOCpk21H4QrR16buJqxJdjlKukUqKQXyjlYtDDFjWaiPAIOFCA-JzJNBQJD_YIi_6WKW16ZUWXgbLXpmXN_Rp_6EbzExzbf9ir3FZK2UfXTWv0DiUP1eUbcxQeX_Z2oAxDQevPS549CpT5Myc6wqMYizv1mddnGCcteaCAVv_rIJrlYjwyqiAM0ntRKvBdXrpM_NFX_wQbpMlmvvbJXEZ5aiR4CSKY57YKqBlkyBFwFQEoKCmAb3y0WeBv9vYfw7jy5pw11TXvHXKkVj1qSki0D-4QjACQXVwPU1gbDGwQg3T0wjVYiA2EiJ4og6KIAEqfidq7CJv_IUZIXYLp-zOJCq-OXKyKWs=w1216-h310-no" alt="nginx-loadbalancer-03">
 
 그림에서 설명했듯이 __처음 get__ 요청에 대한 응답은 __demo app1__ 에서, 그다음 요청인 __get styles.css__ 요청은 __demo app2__ 으로 전달되며, 로드밸런싱이 잘 되는 것을 알 수 있습니다.
 
-다음 챕터에서 nginx loadbalancing config 를 수정하여 이런 점들을 고쳐보도록 하겠습니다.
-
 ## nginx LoadBalancing config
 
-이 챕터에서 nginx load balancing config 에 대한 설명을 드리고 수정해 나가겠습니다.
+이번에는 nginx load balancing config 에 대한 설명을 드리고 로드벨런싱을 조금 더 정교하게 수정해 나가겠습니다.
 
-아무것도 설정하지 않으면 __라운드 로빈 방식__ 이라고 말씀드렸었습니다. nginx 에서는 아래 세 가지 방식을 지원합니다.
+이전 챕터에서 아무것도 설정하지 않으면 __라운드 로빈 방식__ 이라고 말씀드렸었습니다. nginx 에서는 라운드로빈 방식 외에 추가적으로 두 가지 방식을 더 지원합니다.
 
 1. round-robin: 라운드 로빈방식으로 서버를 할당
 2. least-connected:  커넥션이 가장 적은 서버를 할당
 3. ip-hash:  클라이언트 IP를 해쉬한 값을 기반으로 특정 서버를 할당
 
-저희는 커넥션이 가장 적은 서버를 할당하도록 하겠습니다.
+저희는 __least-connected__ 방식을 사용하겠습니다.
 
 ```bash
 server {
@@ -124,11 +124,11 @@ upstream express-app {
 }
 ```
 
-여기서 특정 옵션들이 사용될 수 있습니다. [생활코딩](https://opentutorials.org/module/384/4328) 에서 정리한 표를 가져오겠습니다.
+여기서 server 디렉티브에는 특정 옵션들이 사용될 수 있습니다. [생활코딩](https://opentutorials.org/module/384/4328) 에서 정리한 표를 가져왔습니다.
 
-- __weight__=n: 업스트림 서버의 비중을 나타낸다. 이 값을 2로 설정하면 그렇지 않은 서버에 비해 두배 더 자주 선택된다.
-- __max_fails__=n: n으로 지정한 횟수만큼 실패가 일어나면 서버가 죽은 것으로 간주한다.
-- __fail_timeout__=n: max_fails가 지정된 상태에서 이 값이 설정만큼 서버가 응답하지 않으면 죽은 것으로 간주한다.
+- __weight=n__: 업스트림 서버의 비중을 나타낸다. 이 값을 2로 설정하면 그렇지 않은 서버에 비해 두배 더 자주 선택된다.
+- __max_fails=n__: n으로 지정한 횟수만큼 실패가 일어나면 서버가 죽은 것으로 간주한다.
+- __fail_timeout=n__: max_fails가 지정된 상태에서 이 값이 설정만큼 서버가 응답하지 않으면 죽은 것으로 간주한다.
 - __down__: 해당 서버를 사용하지 않게 지정한다. ip_hash; 지시어가 설정된 상태에서만 유효하다.
 - __backup__: 모든 서버가 동작하지 않을 때 backup으로 표시된 서버가 사용되고 그 전까지는 사용되지 않는다.
 
@@ -144,8 +144,11 @@ server {
 upstream express-app {
   least_conn;
 
+  # demo-app-1 에 가중치 2 부여
+  # 5번의 실패 확인, 실패 후 30초 응답시간 설정
   server 127.0.0.1:7000 weight=2 max_fails=3 fail_timeout=30s;
   server 127.0.0.1:8000 max_fails=3 fail_timeout=30s;
+  # demo-app-3는 모든 앱이 죽은 경우에만 사용
   server 127.0.0.1:9000 backup;
 }
 ```
@@ -163,6 +166,7 @@ server {
   location / {
     include /etc/nginx/proxy_params;
     proxy_pass http://express-app;
+    # 에러처리 항목 추가
     proxy_next_upstream error timeout invalid_header http_500 http_502 http_503 http_504;
   }
 }
@@ -176,11 +180,11 @@ upstream express-app {
 }
 ```
 
-완성되었으면 nginx 를 재실행시켜 줍니다!!
+완성되었으면 nginx 를 재실행시켜 준 뒤 접속해 보도록 하겠습니다.
 
-아마 아무리 해도 __first app__ 과 __second app__ 이 돌아가면서 나올 것입니다.
+몇번을 반복해도 __first app__ 과 __second app__ 만 돌아가면서 보여줄 것으로 예상됩니다.
 
-그럼 이번에 __backup__ 을 확인하기 위해 돌아가고 있던 두 개의 앱을 죽이겠습니다. 포스팅을 따라 오셨다면 서로 다른 프로세스로 띄웠습을 알 수 있습니다. 이 두개의 프로세스를 죽이도록 하겠습니다.
+그럼 이번에 __backup__ 을 확인하기 위해 실행되고 있는 두 개의 앱(demo1, demo2)을 중지시키겠습니다. 포스팅을 따라 오셨다면 두 개의 앱은 서로 다른 프로세스로 띄웠습을 알 수 있습니다. 즉, 이 두개의 프로세스를 죽이면 앱 실행을 중지시킬 수 있습니다.
 
 ```bash
 # demo-app-1 프로세스 죽이기
@@ -196,13 +200,13 @@ $ kill -9 `ps -ef | grep demoapp-2 | awk '{print $2}'`
 
 아무리 접속해도 위 스크린샷 처럼 Third App 만 나올 것입니다.
 
-마지막으로 connection 이 중지되었는지 확인하겠습니다. nginx 설정에서 에러는 `cat /var/log/nginx/proxy/error.log` 에 저장하도록 했으니 아래 명령어를 이용해서 어떤 에러가 발생햇는지 확인하겠습니다.
+마지막으로 connection 이 연결이 끊겼는지 확인하겠습니다. nginx 설정 할 때 에러는 `/var/log/nginx/proxy/error.log` 에 저장하도록 했으니 아래 명령어를 이용해면 어떤 에러가 발생했는지 확인 할 수 있습니다.
 
 ```bash
 $ cat /var/log/nginx/proxy/error.log
 ```
 
-아래 사진처럼 upstream 에러가 발생하시면 설정이 잘 된 것입니다.
+아래 사진처럼 connection, upstream 에러가 발생하시면 저희가 생각한 대로 작동하고 있었다는 것을 알 수 있습니다.
 
 <img src="https://lh3.googleusercontent.com/u3xUkBqGOFLzFAeJG-Hb6LmOevxYmAw6Kkg37KHz-1MtCvEPqLmT1EY0RxGf2lUUht1r9QvJNyuwEbem9orFTL4z-E4Ze-QHhZWB8f-CQ99vh5CdYeAfJIJocmLnWrCusXi7PpDAxTtkfq7jWW3nV6e_1nfUwtUIoMTCmObDT5zbzmMki5YiCnaobpMQV6Xd_ZsL43Ahoz-wtA5xcqIXsocebqIoDTqIN0cBga1tdVRo6jTCKCUnDVJ68J-TlHWcAlK8hGlY5DHhU5uXFkfEl3NEYME9hJJuDOCV_dI3NLfeLV7lw0frMYGlKze_sHNWX6zlPfxW3Si534-fLNCXXJwZxTTyEqdNpMXes0PhyO6u6E1JPFH3J2iIBMNJ9oitHdmpBiRdDPdLW07AW1_2tEMKHoBXVSECmuZYvtTmCjqnp9vkwuwgt5mD3Jz-G4ZWZ-KDo82QzFwemt2F8c9zjM8qG8TxnLxX_oJ76C89BgL1exyN_EnxS_X1naCTG3Yp5xKU4oKEGI3a09nJsD_jzSo-wg6yC_J7DRuVfTtvtNzeVWEKCrC9Rf54lhAJeqIU9RUK_5twEUjuZ9H-E3mMeE7HDmGfZKDJ7O_9xm3UG-P-vgZXe5LG_9jaWUlSGiJh1Xu-FRVjbOwx8KgYThuTAQPWJzDAiTTvWiyk1zyK7-ie6iH0LQK2VfQ=w1680-h362-no" alt="nginx-loadbalancer-05">
 
@@ -210,9 +214,7 @@ $ cat /var/log/nginx/proxy/error.log
 
 사실 어떻게 보면 이번 포스팅은 proxy 서버구축의 연장선상에 있다고 해도 무방하다고 생각합니다. 그래서 그런지 이번 포스팅은 조금 빨리 끝낸 느낌이 있군요. 
 
-이 로드 벨런싱 기능 덕분에 __kubernetes__ 의 공식 ingress 도 nginx 로 되어 있지 않나 합니다. 만약 이 설정방법을 모른다면 아무리 kubernetes 를 이용한다고 해도 커스터마이징은 힘들겠죠??
-
-한번쯤은 이렇게 기본적인 부분들을 보는 것도 도움이 되지 않나 싶습니다.
+이 강력하면서도 쉬운 로드 벨런싱 기능 덕분에 __kubernetes__ 의 공식 __ingress__ 도 nginx 로 되어 있지 않나 합니다. 만약 이 설정방법을 모른다면 kubernetes 를 이용할 때 더 헤머게 되겠죠? 그런 이유에서라도 한번쯤은 이렇게 기본적인 부분들을 보는 것도 도움이 되지 않나 싶습니다.
 
 ## 참고 자료
 
