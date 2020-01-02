@@ -2,7 +2,7 @@
 layout: post
 comments: true
 title:  "[Nginx] Load Balancer 설정하기"
-date:   2020-01-03
+date:   2020-01-02
 author: Cory
 categories: Web
 permalink : /dev/nginx/loadbalancer
