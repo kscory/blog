@@ -21,11 +21,9 @@ tags: review book
 
 다만, 개인적으로 생각하기에는 책 자체가 굉장히 얅기 때문에 (대략 200페이지)뒷장에서는 앞에서 설명한 프레임워크를 가지고 조금 더 정교하게 공격하고 방어하는 시나리오가 있었으면 어떨까 싶었다. 또한 이 책에서는 사전식으로 보안 프레임워크를 하나하나 끊어서 설명하는데 이 프레임워크들을 전체적으로 엮어서 사용하는 방법에 대해서 알려줬으면 어떨까 싶다.
 
-이런 점들을 생각해 봤을 때 개인적으로는 이 책을 __레퍼런스__ 로 활용할 것 같다는 생각이 든다. 보안적인 이슈가 생겼을 때, "어떤 프레임워크를 쓰면 될까" 할때 이 책을 보고 기술을 선택하고, 그 기술에 대해서 공부할 때는 다시 스스로 할 것 같다는 생각이 들었다.
+이런 점들을 생각해 봤을 이 책을 __레퍼런스__ 로 활용한다면 좋을 것 같다. 보안적인 이슈가 생겼을 때, "어떤 프레임워크를 쓰면 될까" 할때 이 책을 보고 기술을 선택하고, 그 기술에 대해서 공부할 때는 다시 스스로 할 것 같다는 생각이 들었다.
 
 그렇기 때문에 사실 Active Defense 에 대해서 이미 접해보았고 아는 사람이라면 이 책은 실망스럽다고 생각할 수 있을 것 같기도 하다. 하지만, 작성자의 경우 앞에서도 이야기 했지만 __입문자__ 이기 때문에 신선하면서도 보안에 대해서 좀 더 생각해 볼 수 있는 시간을 가졌었던 것 같다. 
-
-개인적으로는 이 책의 총 평은 __여러 Active Defense 프레임워크를 접해보고 싶은 입문자를 위한 책__ 이라고 평하고 싶다.
 
 <img src="https://lh3.googleusercontent.com/p-m4f2xFJSqh5f7AXz729jFiwjKnDeaSo_R68ZtdRUg8YlU8k5CQrYQm6v0Hy2dIrL-MtScu12HozG23Phb0P_MDQ8aSEPkQ3ZElDIwTZv4a8IUiyy9a7l3upiWvNZi93TZztxIyMIneQSRc-FesEFobc-CKSUvix4KpfM1uj8j1pRQr1sZDh-oexYQkrMd3NXOPP1E0QjC_Fo7nlHuUVj0mGpBLocm2G-Mc-eNIDetkF7osk7MvBuDRbETQ9FJHpwpkdkd1nwyyDN_nOwK3pwP4GijC9YdJ1ppOpi39Zkpqk85nHhoD6i1IMSMACL2vhfLOC9y-XD4tdXtwx7v1fuYo3yhJqq2axYnMpjdZPZzr9dGYJOxDZkkrh9jf5KVjNdF3u9JFlmfeZWnoCnvrUjn1WqB482UfmyvUfxn1XeWUklFB_AHAubSm4QtU7OQFPKwP1Va0UMtMgFVuc0266M-4flLXvhp5Ao_SJL7kXvXvbybLw7uPO1t-UMPrnrgjNe-32J4zZBkhqFI1gGHqfs0WQKQ47jdddRswjeC-Kb_Osv-moY5j-jbQygEXhzAHicFk3LTZLkuz6ATlbwVcrhKk2zBDf6LAtWYIycoNqhE_sVr40S2euIxS19ST_3GomfN6FbmOkoF-IjATIjQb3bFvcHj5dqcaoKlwAupOzrtSRunPRTX8e7JUyLF_oh00CA7leqyE2MqbEDDI5IWVWF3tjcfQX_zCm3tChWt_uVIlZdUZE2vHd2I=w2400-h1800-no" alt="active_defense-02">
 
