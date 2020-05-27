@@ -12,7 +12,8 @@ permalink: /about/
 코인플러그 사업개발
 
 現)
-[Gameper](https://gameper.io/) Co-Founder, Lead Engineer<br>
-[Dappcampus](https://www.youtube.com/channel/UCvF95zGgUlY2G6Lkb1GO-fw) 운영
+[GAMEPER](https://gameper.io/) Co-Founder<br>
+[Bitro](https://bitro.kr/) 개발<br>
+[dappCampus](https://www.youtube.com/channel/UCvF95zGgUlY2G6Lkb1GO-fw) 운영
 
 도전을 즐기며 새로운 기술에 관심이 많은 개발자입니다. 많은 소통 바랍니다!
