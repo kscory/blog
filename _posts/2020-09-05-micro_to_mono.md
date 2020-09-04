@@ -2,7 +2,7 @@
 layout: post
 comments: true
 title:  "[프로그래밍 방법론] 마이크로 서비스에서 모놀로틱으로 1"
-date:   2020-09-04
+date:   2020-09-05
 author: Cory
 categories: programming_paradigm
 permalink : /dev/programming_paradigm/bitro_micro_to_mono
