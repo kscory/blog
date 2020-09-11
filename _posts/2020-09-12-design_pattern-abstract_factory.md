@@ -9,9 +9,7 @@ permalink : /dev/design-pattern/abstract_factory
 tags: design pattern
 ---
 
-__Abstract Factory Pattern__ 이란 
-
-상세화된 서브클래스를 정의하지 않고 서로 관련성이 있거나 독립적이 여러 객체의 군을 생성하기 위한 인터페이스를 제공하는 패턴을 의미합니다. (출처: [gof 디자인 패턴](http://www.yes24.com/Product/Goods/17525598)) 
+__Abstract Factory Pattern__ 이란 상세화된 서브클래스를 정의하지 않고 서로 관련성이 있거나 독립적이 여러 객체의 군을 생성하기 위한 인터페이스를 제공하는 패턴을 의미합니다. (출처: [gof 디자인 패턴](http://www.yes24.com/Product/Goods/17525598)) 
 
 단순하게 이야기하면 클라이언트 입장에서 실제 구현 클래스를 알 필요 없이 인터페이스만으로 시스템을 조작할 수 있도록 한다는 뜻입니다.
 
