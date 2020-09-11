@@ -28,9 +28,9 @@ __Abstract Factory Pattern__ 이란 상세화된 서브클래스를 정의하지
 
 ### 사용하는 이유
 
-추상 팩토리 패턴은 실제 객체가 무엇인지 알지 못해도 객체를 생성하고 조작할 수 있도록 도와줍니다. 이에 따라 객체가 생성되거나 구성, 표현되는 방식과 무관하게 시스템을 독립적으로 만들 수 있게 도와줍니다.
+추상 팩토리 패턴은 실제 객체가 무엇인지 알지 못해도 객체를 생성하고 조작할 수 있도록 하여 객체가 생성되거나 구성, 표현되는 방식과 무관하게 시스템을 독립적으로 만들 수 있게 도와줄 수 있어 사용하게 됩니다. 
 
-이 추상 팩토리 패턴은 자바의 Collection 에 적용되어 있다 하니 한번 간단한 연산만 알아보도록 하겠습니다. (원래 복잡할 수 있지만 이 예시에 맞춰서 축소시키도록 하겠습니다.)
+이 추상 팩토리 패턴은 자바의 Collection 에 적용되어 있다 하니 간단하게 한번 알아보도록 하겠습니다. (원래 클래스는 복잡하게 되어 있지만 저는 예시에 맞춰서 축소시키도록 하겠습니다.)
 
 먼저 AbstractFactory 인 `List` 인터페이스 입니다.
 
@@ -42,9 +42,7 @@ public interface List<E> extends Collection<E> {
 }
 ```
 
-보면 알겠지만 __Collection__ (AbstractFactory) 의 listIterator() 함수는 __ListIterator__ (AbstractProduct) 를 생성할 수 있도록 정의하였습니다.
-
-그리고 아룰 상속받은 ConcreteFactory 인 `ArrayList` 클래스는 아래와 같이 인터페이스를 구현하고 있습니다.
+보면 알겠지만 __Collection__ (AbstractFactory) 의 listIterator() 함수는 __ListIterator__ (AbstractProduct) 를 생성할 수 있도록 정의하였습니다. 그리고 이를 상속받은 ConcreteFactory 인 `ArrayList` 클래스는 아래와 같이 인터페이스를 구현하고 있습니다.
 
 ```java
 public class ArrayList<E> implements List<E> {
@@ -67,9 +65,7 @@ public class ArrayList<E> implements List<E> {
 }
 ```
 
-여기서 주목해야 할 점은 listIterator() 를 구현하면서 `ArrayListItr(0)` (ConcreteProduct)를 통해 ListIterator (AbstractProduct) 를 생성하고 있다는 점입니다. 
-
-이미 이야기 했지만 이번에는 AbstractProduct 인 `ListIterator` 를 살펴보겠습니다. 
+여기서 주목해야 할 점은 listIterator() 를 구현하면서 `ArrayListItr(0)` (ConcreteProduct)를 통해 ListIterator (AbstractProduct) 를 생성하고 있다는 점입니다. 다음으로는 AbstractProduct 인 `ListIterator` 인터페이스를 살펴보겠습니다. 
 
 ```java
 public interface ListIterator<E> extends Iterator<E> {
@@ -99,7 +95,7 @@ class ArrayListItr implements ListIterator<E> {
 }
 ```
 
-이렇게 정의되어 있는 클래스와 인터페이스를 가지고 저희는 아래와 같은 클래스를 만들어내곤 할 것입니다.
+저희는 이렇게 정의되어 있는 클래스와 인터페이스를 가지고 저희는 아래와 같이 사용하기 위해서 util 성 클래스인 Printer 함수를 만들 수 있을 것입니다.
 
 ```java
 class Printer {
@@ -115,7 +111,7 @@ class Printer {
 }
 ```
 
-그런데 여기서 잘 보시면 Client 에서는 __ArrayList__ 와 __ListItr__ 클래스는 따로 사용하지 않은 것을 볼 수 있습니다. 즉, 내가 `LinkedList` 를 사용하고 싶다면 코드를 정의하고 __Printer__ 클래스의 __print()__ 메서드에 LinkedList 를 넘겨주면 됩니다. 단, 이 LinkedList 에서는 __iterator()__ 를 새로이 구현하게 됩니다.
+그런데 여기서 잘 보시면 Client 에서는 __ArrayList__ 와 __ListItr__ 클래스를 직접 사용하지 않은 것을 볼 수 있습니다. 즉, 만약 내가 `LinkedList` 를 사용하고 싶다면 이에 대한 코드를 정의하고 __Printer__ 클래스의 __print()__ 메서드에 LinkedList 를 넘겨주면 됩니다. 단, LinkedList 에서는 __iterator()__ 를 새로이 구현해야 합니다.
 
 ```java
 public class LinkedList<E> implements List<E> {
@@ -156,7 +152,7 @@ class LinkedListItr implements ListIterator<E> {
 }
 ```
 
-즉, 클라이언트에서는 ArrayList 이던, LinkedList 이던지 상관없이 __1. List 라는 인터페이스만__ 을 알고 있고 이 안에는 __2. ListIterator 인터페이스를 생성하는 iterator()__ 함수가 구현되어 있어 이를 사용한 인터페이스만을 사용하게 됩니다.
+즉, 클라이언트에서는 ArrayList 이던, LinkedList 이던지 상관없이 __List 라는 인터페이스만__ 을 알고 있고 이 안에는 __ListIterator 인터페이스를 생성하는 iterator()__ 함수가 구현되어 있어 이를 사용한 인터페이스만을 사용하게 됩니다.
 
 ### 장점과 단점
 
@@ -167,7 +163,7 @@ class LinkedListItr implements ListIterator<E> {
 2. List 와 Iterator 는 강하게 연결되어 있다는 점을 고려해보면 제품의 일관성을 증진시킬 수 있습니다. (List 를 쓸때 Iterator 는 언제나 사용 가능)
 
 단점
-1. 확장성이 떨어집니다. 즉, List 에서 Iterator 다른 인터페이스를 사용하고 싶다면 이를 상속한 클래스인 ArrayList, LinkedList 모두 구현해 주어야 합니다. 혹은 ArrayList 에서는 Iterator 말고 다른 인터페이스를 사용할 수도 없어 수정이 어려울 수 있습니다.
+1. 확장성이 떨어집니다. 예를 들어 List 에서 Iterator 다른 인터페이스를 사용하고 싶다면 이를 상속한 클래스인 ArrayList, LinkedList 모두 구현해 주어야 합니다. 혹은 ArrayList 에서는 Iterator 인터페이스가 아닌 다른 인터페이스를 사용하기에는 어려움이 따를 수 있습니다.
 
 ### 실제 사용 예제
 
@@ -259,9 +255,10 @@ class Client {
 }
 ```
 
-지금 위의 kakao user 는 이 포스팅을 하는 실제 api 를 가져와봤습니다. 
+보시면 알겠지만 Client 에서는 어떤 소셜로그인이던 상관 없이 `OAuthAPI` 와 
+`OAuthUser` 만을 가지고 로그인 처리를 진행하고 있습니다. 다시 말하면 다른 로그인으로 확장할 수 있다는 이야기입니다. 또한 `OAuthAPI` 와 `OAuthUser` 는 밀접하게 연관되어 있는 정보들이기 때문에 추상 팩터리 패턴에 적합하다고 생각하였습니다.
 
-그런데 여기서 내가 Google Login 이 필요하다 싶으면 ConcreteFactory 와 ConcreteProduct 를 아래와 같이 새로 구현해주면 됩니다. (구글 api 는 실제 api 가 아닙니다.)
+여기서 만약 __Google Login__ 을 구현해야 겠다 싶으면 `ConcreteFactory` 와 `ConcreteProduct` 를 아래와 같이 새로 구현해주면 됩니다. (구글 api 는 실제 api 가 아닙니다.)
 
 ```typescript
 class GoogleUser implements OAuthUser{
