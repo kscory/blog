@@ -1,7 +1,7 @@
 ---
 layout: post
 comments: true
-title:  "[책 리뷰] 실전 자바 소프트웨어 개발"
+title:  "[책 리뷰] 자바 최적화"
 date:   2020-09-27
 author: Cory
 categories: Review
