@@ -213,12 +213,12 @@ class SignUpService {
 }
 ```
 
-사실 단순하게 본다면 알아보기 쉬울 수 있지만 이 클래스는 email 기능, tracking 기능이라는 signup 을 위한 기능과는 동떨어져 있다는 것을 알 수 있습니다. 또한 생성자에서 Sinup 이 아닌 다른 서비스 클래스들을 주입받고 있다는 점에서 이 클래스는 __단일 책임 원칙__ 에 위반된 클래스라고 생각할 수 있습니다.
+사실 단순하게 본다면 알아보기 쉬울 수 있지만 이 클래스는 "email 을 보내는 서비스", "tracking 을 하는 서비스" 와 같은 signup 을 위한 로직과는 동떨어져 있는 서비스를 이용하고 있는 것을 알 수 있습니다. 즉, SignUp 에만 집중된 클래스들이 아니라 다른 서비스 클래스들을 사용하고 있다는 점에서 이 클래스는 __단일 책임 원칙__ 에 위반된 클래스라고 생각할 수 있습니다.
 
-따라서 여기서 저희가 원하는 것은 `SignUpService` 에서 `TrackingService` 와 `EmailService` 를 분리하는 일입니다. 이를 위해 아래처럼 구성요소들을 정의해봤습니다.
+따라서 여기서 저희가 원하는 작업은 `SignUpService` 에서 `TrackingService` 와 `EmailService` 를 분리하는 일입니다. 이를 위해 아래처럼 구성요소들을 정의해봤습니다.
 
 * __Subject__: EmitterSubject
-* __Observer__: EventEmitter (Nodejs 에서 내장되어 있습니다.)
+* __Observer__: EventEmitter (Nodejs 에 내장되어 있습니다.)
 * __ConcreteSubject__: EmitterSubjectImpl
 * __ConcreteObserver__: GAEmitter, NotificationEmitter
 
@@ -236,7 +236,7 @@ TrackingEmitter.on('user_signup', (user: User) => {
 });
 ```
 
-우선 email 을 담당하는 서비스 클래스는
+email 을 담당하는 서비스 클래스는
 
 ```typescript
 const EmailEmitter = new EventEmitter();
@@ -293,11 +293,11 @@ class SignUpService {
 }
 ```
 
-코드는 조금 더 많아졌을지도 모르지만 SignUpService 에서는 이제 EmailService, TrackingService 에서 어떤 일을 하는지 모르는 상태가 됩니다. 즉, 관심사의 분리가 잘 적용될수 있다는 점을 알 수 있습니다. 
+코드는 조금 더 많아졌을지도 모르지만 SignUpService 에서는 이제 EmailService, TrackingService 에서 어떤 일을 하는지 모르는 상태가 됩니다. 즉, 관심사의 분리가 잘 적용되어 있다는 점을 알 수 있습니다. 
 
-만약, 요구사항이 "회원가입때 메일 대신 sms 를 보내달라" 라고 바뀌게 되었다고 생각해보겠습니다. 옵저버 패턴을 적용하지 않았을 경우에는 SignUpService 에서 `EmailService` 가 아니라 또다른 클래스인 `SmsService` 같은 또다른 클래스를 상속받아서 문자를 보내는 로직을 작성해야 할 것입니다. __하지만__ 옵저버 패턴을 적용하면 SignUpService 에서는 이메일을 보내던 Sms 를 보내던 상관없이 그냥 `user_signup` 이라는 이벤트만 방출하면 된다는 뜻입니다.
+만약, 요구사항이 "회원가입때 유저에게 메일뿐 아니라 문자도 보내주세요" 라고 바뀌게 되었다고 생각해보겠습니다. 옵저버 패턴을 적용하지 않았을 경우에는 `SignUpService` 에서 `EmailService` 뿐만 아니라 `SmsService` 같은 또다른 클래스를 상속받아서 문자를 보내는 로직을 작성해야 할 것입니다. __하지만__ 옵저버 패턴을 적용하게 되면 이메일을 보내던, 문자를 보내던, 둘 다 보내던 상관없이 `SignUpService` 에서는 그냥 __user_signup__ 이라는 이벤트만 방출하고 다른 클래스에서 이 이벤트를 받아서 처리하기만 하면 된다는 점입니다. 또한 `SignUpService` 가 아닌 다른 클래스도 __user_signup__ 이벤트가 어디서 온 이벤트인지는 모르고 "이 이벤트에는 이런 로직을 진행할거다" 라고 작성하기만 하면 된다는 뜻입니다.
 
-다만, Node.js 에서 이 패턴을 사용할 때 반드시 __에러처리에 유념__ 해서 작성하시길 바랍니다.
+다만, 주의할 점은 Node.js 에서 이 패턴을 사용할 때 반드시 __에러처리__ 에 유념해서 개발하셔야 합니다. 비동기로 일어나는 에러기 때문에 api 에서는 response 로써 다루기가 까다로울 수 있습니다.
 
 ### 마무리
 
