@@ -1,7 +1,7 @@
 ---
 layout: post
 comments: true
-title:  "[책 리뷰] 클라우ㅜ드 네이티브"
+title:  "[책 리뷰] 클라우드 네이티브"
 date:   2021-04-18
 author: Cory
 categories: Review
@@ -11,7 +11,7 @@ tags: review book
 
 <img src="https://lh3.googleusercontent.com/pw/ACtC-3cwV3AswjZT1-1M-umbtSfkvhfh3VTmbWDD5E4qKEJEZiVdaqWVqjLlIKzaBxKHNXrnGprCdIeqRCeVEvSdwfVLE6n1wf021RHohQo9A-j_CWNj6WdiKz-EpP-GwDAYZjLujSoltjX0Qe8G3t0c0gwn=w960-h720-no?authuser=0" alt="cloud_native-01">
 
-`이 리뷰눈 한빛미디어 <나는 리뷰어다> 활동을 위해서 책을 제공받아 작성된 서평입니다.`
+> 이 리뷰눈 한빛미디어 <나는 리뷰어다> 활동을 위해서 책을 제공받아 작성된 서평입니다.
 
 요즘 대부분의 스타트업들은 클라우드 네이티브 환경으로 인프라를 구축하는 것이 대세인 것 같다. 그 이유는 다른 인프라 환경에 비해 그나마 쉽고 빠르게 인프라를 구축할 수 있기 때문일 것이다. 또한 대부분 클라우드 네이티브 환경에서의 MSA 를 구축하게 될텐데 이 책은 그 때 알아야 할 개념들에 대해서 알려주고 있다. 책 자체가 250 페이지 정도로 짧기 때문에 많은 내용이 담겨 있지는 않고 함축적으로 특정 개념들에 대해서 설명해준다.
 
