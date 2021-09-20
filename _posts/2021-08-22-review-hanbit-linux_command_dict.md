@@ -2,7 +2,7 @@
 layout: post
 comments: true
 title:  "[책 리뷰] 리눅스 입문자를 위한 명령어 사전"
-date:   2021-07-20
+date:   2021-08-22
 author: Cory
 categories: Review
 permalink : /daliy-life/review/hanbit-linux_command_dict
