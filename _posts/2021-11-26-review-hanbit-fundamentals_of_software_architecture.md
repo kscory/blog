@@ -1,8 +1,8 @@
 ---
 layout: post
 comments: true
-title:  "[책 리뷰] 핸즈온 해킹"
-date:   2021-10-24
+title:  "[책 리뷰] 소프트웨어 아키텍처 101"
+date:   2021-11-26
 author: Cory
 categories: Review
 permalink : /daliy-life/review/hanbit-fundamentals_of_software_architecture
