@@ -1,7 +1,7 @@
 ---
 layout: post
 comments: true
-title:  "[책 리뷰] 팀장부터 CEO까지 알아야 할 기업 정보보안 가이드"
+title:  "[책 리뷰] 자바 마이크로서비스를 활용한 SRE"
 date:   2022-02-23
 author: Cory
 categories: Review
