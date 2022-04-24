@@ -2,7 +2,7 @@
 layout: post
 comments: true
 title:  "[책 리뷰] 리액트 네이티브를 다루는 기술"
-date:   2022-02-23
+date:   2022-04-10
 author: Cory
 categories: Review
 permalink : /daliy-life/review/gilbut-reactive_native_tech

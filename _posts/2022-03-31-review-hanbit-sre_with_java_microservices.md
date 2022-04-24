@@ -2,7 +2,7 @@
 layout: post
 comments: true
 title:  "[책 리뷰] 자바 마이크로서비스를 활용한 SRE"
-date:   2022-02-23
+date:   2022-03-31
 author: Cory
 categories: Review
 permalink : /daliy-life/review/hanbit-sre_with_java_microservices
