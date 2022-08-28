@@ -11,7 +11,7 @@ tags: review book
 
 <img src="https://lh3.googleusercontent.com/pw/AL9nZEXxuVM4ZYWy6pd-M6lfi9aHc-eCsiUlVd8Db8h8Y3enHy4k3XldfQ3kbYt0jF1R3nlI3OK8zO1W3GeTwNQg_2HC8UHqjhdjQc4RNRy-yCcRcl8AJGu2El6OzR00iGysxVdSyL7lnLZPeDAcrCeY9-4q=w2302-h1728-no?authuser=0" alt="hanbit-sql_for_data_analysis">
 
-> 이 리뷰는 한빛미디어 <나는 리뷰어다> 활동을 위해서 책을 제공받아 작성된 서평입니다.
+> 이 리뷰는 한빛미디어 __나는 리뷰어다__ 활동을 위해서 책을 제공받아 작성된 서평입니다.
 
 요즘엔 많은 회사들에서 데이터 분석을 진행하는데 기초적으로 알아야 할 프로그래밍 언어가 python 이라면 데이터베이스 언어중에 가장 기초적으로 알아야 할 언어는 SQL 이다. 또한 분석가가 아니라더라도 작성자처럼 백앤드 위주로 개발하는 사람이라면 매일처럼 사용하는 것이 아마도 SQL 일 것이다. 이 책은 SQL 을 활용해서 데이터 분석하는 방법에 대해서 알려주는 기본서이다.
 
